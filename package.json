@@ -1,0 +1,20 @@
+{
+	"name": "miyojs-filter-property",
+	"version": "0.0.1",
+	"description": "property - executable property in Miyo dictionary",
+	"main": "property.js",
+	"scripts": {
+		"test": "mocha"
+	},
+	"dependencies": {
+	},
+	"author": {
+		"name": "narazaka",
+		"url": "http://narazaka.net/"
+	},
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Narazaka/miyojs-filter-property.git"
+	}
+}
