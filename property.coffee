@@ -5,7 +5,7 @@ unless MiyoFilters?
 
 MiyoFilters.property_initialize = type: 'through', filter: (argument, request, id, stash) ->
 	handlers = argument.property_initialize.handlers
-	property_getter = (property_base, property_with_handler_name, pre_hook, handler_name) ->
+	property_getter = (property_base, property_with_handler_name, pre_hook, handler_name, request, id, stash) ->
 		property = property_base[property_with_handler_name]
 		if pre_hook?
 			pre_hook_handler = if handler_name of pre_hook then pre_hook[handler_name] else pre_hook
@@ -24,7 +24,7 @@ MiyoFilters.property_initialize = type: 'through', filter: (argument, request, i
 			for handler_name in handlers
 				property_with_handler_name = property_name + '.' + handler_name
 				if property_with_handler_name of property_base
-					property = property_getter.call @, property_base, property_with_handler_name, pre_hook, handler_name
+					property = property_getter.call @, property_base, property_with_handler_name, pre_hook, handler_name, request, id, stash
 					handler = @filters.property_handler[handler_name]
 					try
 						[compiled_property, compiled_handler_name] = handler.call @, property, request, id, stash
@@ -34,7 +34,7 @@ MiyoFilters.property_initialize = type: 'through', filter: (argument, request, i
 					break
 			unless compiled_property_name of property_base
 				if property_name of property_base
-					property = property_getter.call @, property_base, property_name, pre_hook, 'plain'
+					property = property_getter.call @, property_base, property_name, pre_hook, 'plain', request, id, stash
 					@set_compiled_property property_base, compiled_property_name, property, 'plain_compiled'
 		@compiled_property property_base, compiled_property_name, request, id, stash
 	@has_property = (property_base, property_name) ->
