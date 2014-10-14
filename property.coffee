@@ -3,7 +3,7 @@
 unless MiyoFilters?
 	MiyoFilters = {}
 
-MiyoFilters.property_initialize = (argument, request, id, stash) ->
+MiyoFilters.property_initialize = type: 'through', filter: (argument, request, id, stash) ->
 	handlers = argument.property_initialize.handlers
 	property_getter = (property_base, property_with_handler_name, pre_hook, handler_name) ->
 		property = property_base[property_with_handler_name]
