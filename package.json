@@ -1,6 +1,6 @@
 {
 	"name": "miyojs-filter-property",
-	"version": "1.1.0",
+	"version": "1.2.0",
 	"description": "property - executable property in Miyo dictionary",
 	"keywords": ["miyojs", "miyojs-filter"],
 	"main": "property.js",
@@ -17,7 +17,7 @@
 		"sinon": ">= 1.10.3",
 		"istanbul": ">= 0.3.2",
 		"jade": ">= 1.0.2",
-		"miyojs": ">= 1.0.0"
+		"miyojs": "^2.0.2"
 	},
 	"author": {
 		"name": "narazaka",

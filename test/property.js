@@ -40,7 +40,7 @@
       return stash = null;
     });
     return it('should define methods', function() {
-      var entry, return_argument;
+      var entry;
       entry = {
         filters: ['property_initialize'],
         argument: {
@@ -49,16 +49,17 @@
           }
         }
       };
-      return_argument = ms.call_filters(entry, null, id);
-      return_argument.should.be.deep.equal(entry.argument);
-      ms.should.have.property('property');
-      ms.property.should.be["instanceof"](Function);
-      ms.should.have.property('has_property');
-      ms.has_property.should.be["instanceof"](Function);
-      ms.should.have.property('set_compiled_property');
-      ms.set_compiled_property.should.be["instanceof"](Function);
-      ms.should.have.property('compiled_property');
-      return ms.compiled_property.should.be["instanceof"](Function);
+      return ms.call_filters(entry, null, id).then(function(argument) {
+        argument.should.be.deep.equal(entry.argument);
+        ms.should.have.property('property');
+        ms.property.should.be["instanceof"](Function);
+        ms.should.have.property('has_property');
+        ms.has_property.should.be["instanceof"](Function);
+        ms.should.have.property('set_compiled_property');
+        ms.set_compiled_property.should.be["instanceof"](Function);
+        ms.should.have.property('compiled_property');
+        return ms.compiled_property.should.be["instanceof"](Function);
+      });
     });
   });
 
@@ -94,7 +95,7 @@
       };
     });
     it('should work with plain', function() {
-      var initialize_entry, property;
+      var initialize_entry;
       initialize_entry = {
         filters: ['property_initialize'],
         argument: {
@@ -103,12 +104,14 @@
           }
         }
       };
-      ms.call_filters(initialize_entry, null, '_load');
-      property = ms.property(argument, 'ok', request, id, stash);
-      return property.should.be.equal('plain');
+      return ms.call_filters(initialize_entry, null, '_load').then(function() {
+        var property;
+        property = ms.property(argument, 'ok', request, id, stash);
+        return property.should.be.equal('plain');
+      });
     });
     it('should work with js', function() {
-      var initialize_entry, property;
+      var initialize_entry;
       initialize_entry = {
         filters: ['property_initialize'],
         argument: {
@@ -117,9 +120,11 @@
           }
         }
       };
-      ms.call_filters(initialize_entry, null, '_load');
-      property = ms.property(argument, 'ok', request, id, stash);
-      return property.should.be.deep.equal(['js', request, id, stash]);
+      return ms.call_filters(initialize_entry, null, '_load').then(function() {
+        var property;
+        property = ms.property(argument, 'ok', request, id, stash);
+        return property.should.be.deep.equal(['js', request, id, stash]);
+      });
     });
     it('should fail with compile error js', function() {
       var initialize_entry;
@@ -131,10 +136,11 @@
           }
         }
       };
-      ms.call_filters(initialize_entry, null, '_load');
-      return (function() {
-        return ms.property(argument, 'compile_error', request, id, stash);
-      }).should["throw"](/property compile error/);
+      return ms.call_filters(initialize_entry, null, '_load').then(function() {
+        return (function() {
+          return ms.property(argument, 'compile_error', request, id, stash);
+        }).should["throw"](/property compile error/);
+      });
     });
     it('should fail with runtime error js', function() {
       var initialize_entry;
@@ -146,13 +152,14 @@
           }
         }
       };
-      ms.call_filters(initialize_entry, null, '_load');
-      return (function() {
-        return ms.property(argument, 'runtime_error', request, id, stash);
-      }).should["throw"](/property execute error/);
+      return ms.call_filters(initialize_entry, null, '_load').then(function() {
+        return (function() {
+          return ms.property(argument, 'runtime_error', request, id, stash);
+        }).should["throw"](/property execute error/);
+      });
     });
     it('should work with jse', function() {
-      var initialize_entry, property;
+      var initialize_entry;
       initialize_entry = {
         filters: ['property_initialize'],
         argument: {
@@ -161,12 +168,14 @@
           }
         }
       };
-      ms.call_filters(initialize_entry, null, '_load');
-      property = ms.property(argument, 'ok', request, id, stash);
-      return property.should.be.deep.equal(['jse', request, id, stash]);
+      return ms.call_filters(initialize_entry, null, '_load').then(function() {
+        var property;
+        property = ms.property(argument, 'ok', request, id, stash);
+        return property.should.be.deep.equal(['jse', request, id, stash]);
+      });
     });
     it('should work with miss jse', function() {
-      var initialize_entry, property;
+      var initialize_entry;
       initialize_entry = {
         filters: ['property_initialize'],
         argument: {
@@ -175,12 +184,14 @@
           }
         }
       };
-      ms.call_filters(initialize_entry, null, '_load');
-      property = ms.property(argument, 'ng', request, id, stash);
-      return property.should.be.equal('j');
+      return ms.call_filters(initialize_entry, null, '_load').then(function() {
+        var property;
+        property = ms.property(argument, 'ng', request, id, stash);
+        return property.should.be.equal('j');
+      });
     });
     it('should work with coffee', function() {
-      var initialize_entry, property;
+      var initialize_entry;
       initialize_entry = {
         filters: ['property_initialize'],
         argument: {
@@ -189,12 +200,14 @@
           }
         }
       };
-      ms.call_filters(initialize_entry, null, '_load');
-      property = ms.property(argument, 'ok', request, id, stash);
-      return property.should.be.deep.equal(['coffee', request, id, stash]);
+      return ms.call_filters(initialize_entry, null, '_load').then(function() {
+        var property;
+        property = ms.property(argument, 'ok', request, id, stash);
+        return property.should.be.deep.equal(['coffee', request, id, stash]);
+      });
     });
     it('should work with coffee block', function() {
-      var initialize_entry, property;
+      var initialize_entry;
       initialize_entry = {
         filters: ['property_initialize'],
         argument: {
@@ -203,12 +216,14 @@
           }
         }
       };
-      ms.call_filters(initialize_entry, null, '_load');
-      property = ms.property(argument, 'block', request, id, stash);
-      return property.should.be.deep.equal(['coffee', request, id, stash]);
+      return ms.call_filters(initialize_entry, null, '_load').then(function() {
+        var property;
+        property = ms.property(argument, 'block', request, id, stash);
+        return property.should.be.deep.equal(['coffee', request, id, stash]);
+      });
     });
     it('should take handler in order', function() {
-      var initialize_entry, property;
+      var initialize_entry;
       initialize_entry = {
         filters: ['property_initialize'],
         argument: {
@@ -217,16 +232,18 @@
           }
         }
       };
-      ms.call_filters(initialize_entry, null, '_load');
-      property = ms.property(argument, 'ok', request, id, stash);
-      property.should.be.deep.equal(['coffee', request, id, stash]);
-      property = ms.property(argument, 'skip', request, id, stash);
-      property.should.be.deep.equal('js');
-      property = ms.property(argument, 'plain', request, id, stash);
-      return property.should.be.deep.equal('plain');
+      return ms.call_filters(initialize_entry, null, '_load').then(function() {
+        var property;
+        property = ms.property(argument, 'ok', request, id, stash);
+        property.should.be.deep.equal(['coffee', request, id, stash]);
+        property = ms.property(argument, 'skip', request, id, stash);
+        property.should.be.deep.equal('js');
+        property = ms.property(argument, 'plain', request, id, stash);
+        return property.should.be.deep.equal('plain');
+      });
     });
     it('should return undefined on not exists', function() {
-      var initialize_entry, property;
+      var initialize_entry;
       initialize_entry = {
         filters: ['property_initialize'],
         argument: {
@@ -235,12 +252,14 @@
           }
         }
       };
-      ms.call_filters(initialize_entry, null, '_load');
-      property = ms.property(argument, 'dummy', request, id, stash);
-      return expect(property).is.undefined;
+      return ms.call_filters(initialize_entry, null, '_load').then(function() {
+        var property;
+        property = ms.property(argument, 'dummy', request, id, stash);
+        return expect(property).is.undefined;
+      });
     });
     it('should work with compiled', function() {
-      var initialize_entry, property;
+      var initialize_entry;
       initialize_entry = {
         filters: ['property_initialize'],
         argument: {
@@ -249,14 +268,16 @@
           }
         }
       };
-      ms.call_filters(initialize_entry, null, '_load');
-      property = ms.property(argument, 'ok', request, id, stash);
-      property.should.be.equal('plain');
-      property = ms.property(argument, 'ok', request, id, stash);
-      return property.should.be.equal('plain');
+      return ms.call_filters(initialize_entry, null, '_load').then(function() {
+        var property;
+        property = ms.property(argument, 'ok', request, id, stash);
+        property.should.be.equal('plain');
+        property = ms.property(argument, 'ok', request, id, stash);
+        return property.should.be.equal('plain');
+      });
     });
     it('should process pre hook object', function() {
-      var initialize_entry, pre_hook_handler, property;
+      var initialize_entry;
       initialize_entry = {
         filters: ['property_initialize'],
         argument: {
@@ -265,17 +286,19 @@
           }
         }
       };
-      ms.call_filters(initialize_entry, null, '_load');
-      pre_hook_handler = function(property, request, id, stash) {
-        return Object.keys(this.filters).length + property + id;
-      };
-      property = ms.property(argument, 'ok', request, id, stash, {
-        'plain': pre_hook_handler
+      return ms.call_filters(initialize_entry, null, '_load').then(function() {
+        var pre_hook_handler, property;
+        pre_hook_handler = function(property, request, id, stash) {
+          return Object.keys(this.filters).length + property + id;
+        };
+        property = ms.property(argument, 'ok', request, id, stash, {
+          'plain': pre_hook_handler
+        });
+        return property.should.be.equal(Object.keys(ms.filters).length + 'plain' + id);
       });
-      return property.should.be.equal(Object.keys(ms.filters).length + 'plain' + id);
     });
     it('should process pre hook single', function() {
-      var initialize_entry, pre_hook_handler, property;
+      var initialize_entry;
       initialize_entry = {
         filters: ['property_initialize'],
         argument: {
@@ -284,15 +307,17 @@
           }
         }
       };
-      ms.call_filters(initialize_entry, null, '_load');
-      pre_hook_handler = function(property, request, id, stash) {
-        return Object.keys(this.filters).length + property + id;
-      };
-      property = ms.property(argument, 'ok', request, id, stash, pre_hook_handler);
-      return property.should.be.equal(Object.keys(ms.filters).length + 'plain' + id);
+      return ms.call_filters(initialize_entry, null, '_load').then(function() {
+        var pre_hook_handler, property;
+        pre_hook_handler = function(property, request, id, stash) {
+          return Object.keys(this.filters).length + property + id;
+        };
+        property = ms.property(argument, 'ok', request, id, stash, pre_hook_handler);
+        return property.should.be.equal(Object.keys(ms.filters).length + 'plain' + id);
+      });
     });
     it('should not process pre hook not match', function() {
-      var initialize_entry, pre_hook_handler, property;
+      var initialize_entry;
       initialize_entry = {
         filters: ['property_initialize'],
         argument: {
@@ -301,17 +326,19 @@
           }
         }
       };
-      ms.call_filters(initialize_entry, null, '_load');
-      pre_hook_handler = function(property, request, id, stash) {
-        return 'dummy';
-      };
-      property = ms.property(argument, 'skip', request, id, stash, {
-        'plain': pre_hook_handler
+      return ms.call_filters(initialize_entry, null, '_load').then(function() {
+        var pre_hook_handler, property;
+        pre_hook_handler = function(property, request, id, stash) {
+          return 'dummy';
+        };
+        property = ms.property(argument, 'skip', request, id, stash, {
+          'plain': pre_hook_handler
+        });
+        return property.should.be.equal('js');
       });
-      return property.should.be.equal('js');
     });
     it('should process pre hook function with attributes', function() {
-      var initialize_entry, pre_hook, property;
+      var initialize_entry;
       initialize_entry = {
         filters: ['property_initialize'],
         argument: {
@@ -320,20 +347,22 @@
           }
         }
       };
-      ms.call_filters(initialize_entry, null, '_load');
-      pre_hook = function(property, request, id, stash) {
-        return Object.keys(this.filters).length + property + id;
-      };
-      pre_hook.jse = function(property, request, id, stash) {
-        return "'" + Object.keys(this.filters).length + property + id + 'jse' + "'";
-      };
-      property = ms.property(argument, 'ok', request, id, stash, pre_hook);
-      property.should.be.equal(Object.keys(ms.filters).length + argument['ok.jse'] + id + 'jse');
-      property = ms.property(argument, 'plain', request, id, stash, pre_hook);
-      return property.should.be.equal(Object.keys(ms.filters).length + 'plain' + id);
+      return ms.call_filters(initialize_entry, null, '_load').then(function() {
+        var pre_hook, property;
+        pre_hook = function(property, request, id, stash) {
+          return Object.keys(this.filters).length + property + id;
+        };
+        pre_hook.jse = function(property, request, id, stash) {
+          return "'" + Object.keys(this.filters).length + property + id + 'jse' + "'";
+        };
+        property = ms.property(argument, 'ok', request, id, stash, pre_hook);
+        property.should.be.equal(Object.keys(ms.filters).length + argument['ok.jse'] + id + 'jse');
+        property = ms.property(argument, 'plain', request, id, stash, pre_hook);
+        return property.should.be.equal(Object.keys(ms.filters).length + 'plain' + id);
+      });
     });
     return it('should fail with pre hook error', function() {
-      var initialize_entry, pre_hook_handler;
+      var initialize_entry;
       initialize_entry = {
         filters: ['property_initialize'],
         argument: {
@@ -342,13 +371,15 @@
           }
         }
       };
-      ms.call_filters(initialize_entry, null, '_load');
-      pre_hook_handler = function(property, request, id, stash) {
-        return a;
-      };
-      return (function() {
-        return ms.property(argument, 'ok', request, id, stash, pre_hook_handler);
-      }).should["throw"](/property pre_hook execute error/);
+      return ms.call_filters(initialize_entry, null, '_load').then(function() {
+        var pre_hook_handler;
+        pre_hook_handler = function(property, request, id, stash) {
+          return a;
+        };
+        return (function() {
+          return ms.property(argument, 'ok', request, id, stash, pre_hook_handler);
+        }).should["throw"](/property pre_hook execute error/);
+      });
     });
   });
 
@@ -391,10 +422,11 @@
           }
         }
       };
-      ms.call_filters(initialize_entry, null, '_load');
-      ms.has_property(argument, 'all').should.be["true"];
-      ms.has_property(argument, 'plain').should.be["true"];
-      return ms.has_property(argument, 'coffee').should.be["false"];
+      return ms.call_filters(initialize_entry, null, '_load').then(function() {
+        ms.has_property(argument, 'all').should.be["true"];
+        ms.has_property(argument, 'plain').should.be["true"];
+        return ms.has_property(argument, 'coffee').should.be["false"];
+      });
     });
     it('should work with handlers', function() {
       var initialize_entry;
@@ -406,12 +438,13 @@
           }
         }
       };
-      ms.call_filters(initialize_entry, null, '_load');
-      ms.has_property(argument, 'all').should.be["true"];
-      ms.has_property(argument, 'plain').should.be["true"];
-      ms.has_property(argument, 'coffee').should.be["true"];
-      ms.has_property(argument, 'js').should.be["true"];
-      return ms.has_property(argument, 'jse').should.be["false"];
+      return ms.call_filters(initialize_entry, null, '_load').then(function() {
+        ms.has_property(argument, 'all').should.be["true"];
+        ms.has_property(argument, 'plain').should.be["true"];
+        ms.has_property(argument, 'coffee').should.be["true"];
+        ms.has_property(argument, 'js').should.be["true"];
+        return ms.has_property(argument, 'jse').should.be["false"];
+      });
     });
     return it('should work with compiled', function() {
       var initialize_entry;
@@ -423,11 +456,12 @@
           }
         }
       };
-      ms.call_filters(initialize_entry, null, '_load');
-      ms.property(argument, 'plain', request, id, stash);
-      ms.has_property(argument, 'plain').should.be["true"];
-      ms.property(argument, 'dummy', request, id, stash);
-      return ms.has_property(argument, 'dummy').should.be["false"];
+      return ms.call_filters(initialize_entry, null, '_load').then(function() {
+        ms.property(argument, 'plain', request, id, stash);
+        ms.has_property(argument, 'plain').should.be["true"];
+        ms.property(argument, 'dummy', request, id, stash);
+        return ms.has_property(argument, 'dummy').should.be["false"];
+      });
     });
   });
 
