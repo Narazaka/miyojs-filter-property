@@ -1,9 +1,17 @@
-chai = require 'chai'
+if require?
+	chai = require 'chai'
+else
+	chai = @chai
 chai.should()
 expect = chai.expect
-sinon = require 'sinon'
-Miyo = require 'miyojs'
-MiyoFilters = require '../property.js'
+if require?
+	sinon = require 'sinon'
+	Miyo = require 'miyojs'
+	MiyoFilters = require '../property.js'
+else
+	sinon = @sinon
+	Miyo = @Miyo
+	MiyoFilters = @MiyoFilters
 
 describe 'initialize', ->
 	ms = null
@@ -52,7 +60,7 @@ describe 'property call', ->
 			'ok': 'plain'
 			'plain': 'plain'
 			'ok.js': '''
-				ret = "js";
+				var ret = "js";
 				return [ret, request, id, stash]
 			'''
 			'compile_error.js': '''

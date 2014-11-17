@@ -1,6 +1,15 @@
 ### (C) 2014 Narazaka : Licensed under The MIT License - http://narazaka.net/license/MIT?2014 ###
 
-unless MiyoFilters?
+if require?
+	CoffeeScript = require 'coffee-script'
+	_require = require
+else
+	CoffeeScript = @CoffeeScript
+	_require = @require
+
+if @MiyoFilters?
+	MiyoFilters = @MiyoFilters
+else
 	MiyoFilters = {}
 
 MiyoFilters.property_initialize = type: 'through', filter: (argument, request, id, stash) ->
@@ -72,12 +81,13 @@ MiyoFilters.property_handler.jse = (property, request, id, stash) ->
 	compiled_property = new Function 'request', 'id', 'stash', 'require', 'return ' + property
 	[compiled_property, 'js_compiled']
 MiyoFilters.property_handler.js_compiled = (compiled_property, request, id, stash) ->
-	compiled_property.call @, request, id, stash, require
+	compiled_property.call @, request, id, stash, _require
 MiyoFilters.property_handler.js.stash = {}
 MiyoFilters.property_handler.coffee = (property, request, id, stash) ->
-	CoffeeScript = require 'coffee-script'
 	compiled_property = eval CoffeeScript.compile "(request, id, stash, require) -> (#{property})", bare: true
 	[compiled_property, 'js_compiled']
 
-if module? and module.exports?
+if module?.exports?
 	module.exports = MiyoFilters
+else
+	@MiyoFilters = MiyoFilters
